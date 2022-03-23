@@ -372,6 +372,14 @@ NSString *const errorMethod = @"error";
     return;
   }
   if (_isStreamingImages) {
+      CFDictionaryRef metadataDict = CMCopyDictionaryOfAttachments(NULL,sampleBuffer, kCMAttachmentMode_ShouldPropagate);
+      NSDictionary *metadata = [[NSMutableDictionary alloc] initWithDictionary:(__bridge NSDictionary*)metadataDict];
+      CFRelease(metadataDict);
+      NSDictionary *exifMetadata = [[metadata objectForKey:(NSString *)kCGImagePropertyExifDictionary] mutableCopy];
+          float brightnessValue = [[exifMetadata objectForKey:(NSString *)kCGImagePropertyExifBrightnessValue] floatValue];
+//      NSLog(@"%f",brightnessValue);
+      
+      
     FlutterEventSink eventSink = _imageStreamHandler.eventSink;
     if (eventSink) {
       CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
@@ -434,7 +442,8 @@ NSString *const errorMethod = @"error";
       Float64 nsExposureDuration = 1000000000 * exposureDuration;
       imageBuffer[@"sensorExposureTime"] = [NSNumber numberWithInt:nsExposureDuration];
       imageBuffer[@"sensorSensitivity"] = [NSNumber numberWithFloat:[_captureDevice ISO]];
-
+      imageBuffer[@"brightnessValue"] = [NSNumber numberWithFloat:brightnessValue];
+        
       dispatch_async(dispatch_get_main_queue(), ^{
         eventSink(imageBuffer);
       });

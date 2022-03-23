@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:camera_platform_interface/camera_platform_interface.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 /// A single color plane of image data.
 ///
@@ -103,6 +104,7 @@ class CameraImage {
         lensAperture = data['lensAperture'] as double?,
         sensorExposureTime = data['sensorExposureTime'] as int?,
         sensorSensitivity = data['sensorSensitivity'] as double?,
+        brightnessValue = Platform.isIOS?data['brightnessValue'] as double?:0.0,
         planes = List<Plane>.unmodifiable((data['planes'] as List<dynamic>)
             .map<Plane>((dynamic planeData) =>
                 Plane._fromPlatformData(planeData as Map<dynamic, dynamic>)));
@@ -140,4 +142,6 @@ class CameraImage {
 
   /// The sensor sensitivity in standard ISO arithmetic units.
   final double? sensorSensitivity;
+
+  final double? brightnessValue;
 }

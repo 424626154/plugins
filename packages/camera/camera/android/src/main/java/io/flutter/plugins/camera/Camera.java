@@ -584,7 +584,10 @@ class Camera
 
     try {
       captureSession.stopRepeating();
-      captureSession.abortCaptures();
+      ///https://github.com/flutter/flutter/issues/88775
+      if(Build.VERSION.SDK_INT > VERSION_CODES.O_MR1){
+        captureSession.abortCaptures();
+      }
       Log.i(TAG, "sending capture request");
       captureSession.capture(stillBuilder.build(), captureCallback, backgroundHandler);
     } catch (CameraAccessException e) {
