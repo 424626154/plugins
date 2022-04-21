@@ -54,6 +54,7 @@ class CameraValue {
     this.recordingOrientation,
     this.isPreviewPaused = false,
     this.previewPauseOrientation,
+    this.nativeDeviceOrientation,
   }) : _isRecordingPaused = isRecordingPaused;
 
   /// Creates a new camera controller state for an uninitialized controller.
@@ -70,6 +71,7 @@ class CameraValue {
           focusMode: FocusMode.auto,
           focusPointSupported: false,
           deviceOrientation: DeviceOrientation.portraitUp,
+          nativeDeviceOrientation: DeviceOrientation.portraitUp,
           isPreviewPaused: false,
         );
 
@@ -143,7 +145,8 @@ class CameraValue {
 
   /// The orientation of the currently running video recording.
   final DeviceOrientation? recordingOrientation;
-
+  ///设备方向
+  final DeviceOrientation? nativeDeviceOrientation;
   /// Creates a modified copy of the object.
   ///
   /// Explicitly specified fields get the specified value, all other fields get
@@ -166,6 +169,7 @@ class CameraValue {
     Optional<DeviceOrientation>? recordingOrientation,
     bool? isPreviewPaused,
     Optional<DeviceOrientation>? previewPauseOrientation,
+    DeviceOrientation? nativeDeviceOrientation,
   }) {
     return CameraValue(
       isInitialized: isInitialized ?? this.isInitialized,
@@ -192,6 +196,7 @@ class CameraValue {
       previewPauseOrientation: previewPauseOrientation == null
           ? this.previewPauseOrientation
           : previewPauseOrientation.orNull,
+        nativeDeviceOrientation: nativeDeviceOrientation ?? this.nativeDeviceOrientation
     );
   }
 
@@ -212,7 +217,9 @@ class CameraValue {
         'lockedCaptureOrientation: $lockedCaptureOrientation, '
         'recordingOrientation: $recordingOrientation, '
         'isPreviewPaused: $isPreviewPaused, '
-        'previewPausedOrientation: $previewPauseOrientation)';
+        'previewPausedOrientation: $previewPauseOrientation,'
+        'nativeDeviceOrientation: $nativeDeviceOrientation'
+        ')';
   }
 }
 
